@@ -39,73 +39,31 @@ public class DatastoreDescriptionConfig implements IDatastoreDescriptionConfig {
 	/******************** Formatters ***************************/
 	public static final String DATE_FORMAT = "localDate[yyyy-MM-dd]";
 
-	
 	@Bean
-	public IStoreDescription products() {
-		
-		return new StoreDescriptionBuilder().withStoreName("Products")
-				.withField("Id", INT).asKeyField()
-				.withField("ProductName", STRING)
-				.withField("ProductType", STRING)
-				.withField("UnderlierCode", STRING)
-				.withField("UnderlierCurrency", STRING)
-				.withField("UnderlierType", STRING)
-				.withField("UnderlierValue", DOUBLE)
-				.withField("ProductBaseMtm", DOUBLE)
-				.withField("BumpedMtmUp", DOUBLE)
-				.withField("BumpedMtmDown", DOUBLE)
-				.withField("Theta", DOUBLE)
-				.withField("Rho", DOUBLE)
-				.build();
-	}
-	
-	@Bean
-	public IStoreDescription trades() {
-		
-		return new StoreDescriptionBuilder().withStoreName("Trades")
-				.withField("Id", LONG).asKeyField()
-				.withField("ProductId", INT)
-				.withField("ProductQtyMultiplier", DOUBLE)
-				.withField("Desk", STRING)
-				.withField("Book", INT)
-				.withField("Trader", STRING)
-				.withField("Counterparty", STRING)
-				.withField("Date", LOCAL_DATE)
+	public IStoreDescription mnp() {
+		return new StoreDescriptionBuilder().withStoreName("MNP")
+				.withField("IdMnp", LONG).asKeyField()
+				.withField("MSISDN", STRING)
+				.withField("Recipient", STRING)
+				.withField("Donator", STRING)
+				.withField("RoutingNumber", STRING)
+				.withField("ICCID", STRING)
 				.withField("Status", STRING)
-				.withField("IsSimulated", STRING)
-				.withModuloPartitioning("Id", 8)
+				.withField("RequestTime", LOCAL_DATE)
+				.withField("RequestCheckTime", LOCAL_DATE)
+				.withField("PortInUpdateTime", LOCAL_DATE)
+				.withField("PortOutUpdateTime", LOCAL_DATE)
+				.withField("QuotaStatus", STRING)
+				.withField("CheckTimeRequestTime", STRING)
+				.withField("PortInTimeCheckTime", STRING)
+				.withField("PortOutTimePortInTime", STRING)
+				.withModuloPartitioning("IdMnp", 8)
 				.build();
 	}
-	
-	/** @return the description of the risk store */
-	public IStoreDescription risks() {
-		return new StoreDescriptionBuilder().withStoreName("Risks")
-				.withField("TradeId", LONG).asKeyField()
-				.withField("Pnl", DOUBLE)
-				.withField("Delta", DOUBLE)
-				.withField("PnlDelta", DOUBLE)
-				.withField("Gamma", DOUBLE)
-				.withField("Vega", DOUBLE)
-				.withField("PnlVega", DOUBLE)
-				.withModuloPartitioning("TradeId", 8)
-				.build();
-	}
-	
+
 	@Bean
 	public Collection<IReferenceDescription> references(){
 		final Collection<IReferenceDescription> references = new LinkedList<>();
-		references.add(ReferenceDescription.builder()
-				.fromStore("Trades")
-				.toStore("Products")
-				.withName("Trade_To_Product")
-				.withMapping("ProductId", "Id")
-				.build());
-		references.add(ReferenceDescription.builder()
-				.fromStore("Risks")
-				.toStore("Trades")
-				.withName("Risk_To_Trade")
-				.withMapping("TradeId", "Id")
-				.build());
 		return references;
 	}
 
@@ -122,9 +80,7 @@ public class DatastoreDescriptionConfig implements IDatastoreDescriptionConfig {
 	@Bean
 	public IDatastoreSchemaDescription schemaDescription() {
 		final Collection<IStoreDescription> stores = new LinkedList<>();
-		stores.add(products());
-		stores.add(trades());
-		stores.add(risks());
+		stores.add(mnp());
 		return new DatastoreSchemaDescription(stores, references());
 	}
 

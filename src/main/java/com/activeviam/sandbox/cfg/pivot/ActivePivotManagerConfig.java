@@ -68,7 +68,7 @@ public class ActivePivotManagerConfig implements IActivePivotManagerDescriptionC
 	public static ISelectionDescription createNanoPivotSchemaSelectionDescription(
 			final IDatastoreSchemaDescription datastoreDescription) {
 		return StartBuilding.selection(datastoreDescription)
-				.fromBaseStore("Risks")
+				.fromBaseStore("MNP")
 				.withAllReachableFields()
 				.build();
 	}
@@ -115,26 +115,21 @@ public class ActivePivotManagerConfig implements IActivePivotManagerDescriptionC
 		
 		return builder
 				
-			.withDimension("Products")
-				.withHierarchy("Underlier")
-					.withLevels("UnderlierType", "UnderlierCode")
-				.withHierarchy("Product").asDefaultHierarchy()
-					.withLevel("ProductType")
-					.withLevel("ProductName")
-				.withHierarchy("Currency")
-					.withLevel("UnderlierCurrency")
-						.withFirstObjects("EUR", "GBP", "USD", "JPY")
-				
-			.withDimension("Booking")
-				.withHierarchyOfSameName().asDefaultHierarchy()
-					.withLevels("Desk", "Book")
-				.withSingleLevelHierarchy("Traders").withPropertyName("Trader")
-						
-			.withDimension("Date")
-				.withHierarchyOfSameName()
-					.withLevel("Date")
-						.withType(LevelType.TIME)
-						.withFormatter("DATE[yyyy-MM-dd]");
+			.withDimension("MNP")
+				.withHierarchy("Recipient").asDefaultHierarchy().withLevelOfSameName()
+				.withHierarchy("Donator").withLevelOfSameName()
+				.withHierarchy("RoutingNumber").withLevelOfSameName()
+				.withHierarchy("ICCID").withLevelOfSameName()
+				.withHierarchy("Status").withLevelOfSameName()
+				.withHierarchy("QuotaStatus").withLevelOfSameName()
+				.withHierarchy("CheckTimeRequestTime").withLevelOfSameName()
+				.withHierarchy("PortInTimeCheckTime").withLevelOfSameName()
+				.withHierarchy("PortOutTimePortInTime").withLevelOfSameName()
+			.withDimension("Times")
+				.withHierarchy("RequestTime").withLevelOfSameName().withType(LevelType.TIME)
+				.withHierarchy("RequestCheckTime").withLevelOfSameName().withType(LevelType.TIME)
+				.withHierarchy("PortInUpdateTime").withLevelOfSameName().withType(LevelType.TIME)
+				.withHierarchy("PortOutUpdateTime").withLevelOfSameName().withType(LevelType.TIME);
 	}
 
 	/* ******************* */
@@ -161,12 +156,7 @@ public class ActivePivotManagerConfig implements IActivePivotManagerDescriptionC
 		
 		return context.createDatasetFromFacts()
 			.agg(
-				count().as("Trade Count"),
-				sum("ProductBaseMtm").as("PnL").withFormatter(DOUBLE_FORMAT),
-				sum("PnlDelta").as("PnlDelta").withFormatter(DOUBLE_FORMAT),
-				sum("PnlVega").as("PnlVega").withFormatter(DOUBLE_FORMAT),
-				sum("Delta").as("Delta").withFormatter(DOUBLE_FORMAT),
-				sum("Vega").as("Vega").withFormatter(DOUBLE_FORMAT)
+				count().as("MNP Count")
 			);
 
 	}
