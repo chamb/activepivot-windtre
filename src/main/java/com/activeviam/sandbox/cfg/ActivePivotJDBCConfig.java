@@ -53,7 +53,7 @@ import com.quartetfs.fwk.monitoring.jmx.impl.JMXEnabler;
 		DataLoadingConfig.class,
 		ActivePivotManagerConfig.class,
 		ContentServiceConfig.class,
-		LocalI18nConfig.class,
+		CustomI18nConfig.class,
 		SecurityConfig.class,
 		CorsFilterConfig.class,
 		ActiveUIResourceServerConfig.class,
