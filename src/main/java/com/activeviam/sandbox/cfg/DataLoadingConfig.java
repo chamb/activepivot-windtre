@@ -6,11 +6,8 @@
  */
 package com.activeviam.sandbox.cfg;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.io.IOException;
+import java.lang.ClassNotFoundException;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -33,125 +30,97 @@ import com.qfs.util.timing.impl.StopWatch;
 
 /**
  * Spring configuration for data sources
- * 
- * @author ActiveViam
  *
+ * @author ActiveViam
  */
 public class DataLoadingConfig {
 
-    private static final Logger LOGGER = Logger.getLogger(DataLoadingConfig.class.getSimpleName());
+	private static final Logger LOGGER = Logger.getLogger(DataLoadingConfig.class.getSimpleName());
 
-    @Autowired
-    protected Environment env;
+	@Autowired
+	protected Environment env;
 
-    @Autowired
-    protected IDatastore datastore;
+	@Autowired
+	protected IDatastore datastore;
 
-
-    
-    
-	/*
-	 * Create an in-memory database and load sample data.
-	 * When using an actual external database this step can be removed.
+	/**
+	 * @return JDBC Source
 	 */
-    @Bean
-    @DependsOn(value = "startManager")
-    public Void createDatabase() throws Exception {
-		
-		// Create database from initialisation script, leave the database open
-	    try(Connection conn = DriverManager.getConnection("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:create.sql'", "sa", "");
-		    Statement stmt = conn.createStatement()) {
+	@Bean
+	public IJDBCSource<QfsResultSetRow> jdbcSource() {
 
-			String sql;
-			ResultSet result;
-			         
-			sql = "SELECT COUNT(*) AS COUNT FROM PRODUCTS";
-			result = stmt.executeQuery(sql);
-			 while(result.next()) {
-				 System.out.println("productCount=" + result.getLong("COUNT"));
-			 }
-			         
-			 sql = "SELECT COUNT(*) AS COUNT FROM TRADES";
-			 result = stmt.executeQuery(sql);
-			 while(result.next()) {
-			    System.out.println("tradeCount=" + result.getLong("COUNT"));
-			 }
-			         
-			 sql = "SELECT COUNT(*) AS COUNT FROM RISKS";
-			 result = stmt.executeQuery(sql);
-			 while(result.next()) {
-			    System.out.println("riskCount=" + result.getLong("COUNT"));
-			 }
-			 
-		} catch(SQLException se) { 
-		    //Handle errors for JDBC 
-		    se.printStackTrace(); 
+		LOGGER.info("Starting JDBC Source configuration");
+
+		Properties applicationProperties = new Properties();
+		try {
+			applicationProperties.load(
+					DataLoadingConfig.class.getClassLoader().getResourceAsStream("application.properties"));
+		} catch (IOException e) {
+			LOGGER.warning("The application.properties could not be loaded. Using default properties.");
 		}
 
-    	return null;
-    }
-    
-    
-	/*
-	 * **************************** Data loading *********************************
-	 */
-    
-    /**
-     * @return JDBC Source
-     */
-    @Bean
-    public IJDBCSource<QfsResultSetRow> jdbcSource() {
-		/* Initialize the database */
-		Properties properties = new Properties();
-		properties.setProperty("username", "sa");
-		properties.setProperty("password", "");
-		
+		// Initialize the database
+		Properties sourceProperties = new Properties();
+		final String username = applicationProperties.getProperty("jdbc.username", "user");
+		final String password = applicationProperties.getProperty("jdbc.password", "user");
+		sourceProperties.setProperty("username", username);
+		sourceProperties.setProperty("password", password);
+
 		// Create the JDBC Source
+		final String uri = applicationProperties.getProperty("jdbc.URI", "jdbc:h2:mem:test");
+		LOGGER.info("Configured a JDBC Source with URI " + uri + " for user " + username);
+
+		final String driver = "com.leanxcale.client.Driver";
+//		try {
+//			final Class driverClass = Class.forName(driver);
+//			LOGGER.info("Driver class " + driverClass + " succesfully loaded");
+//		} catch (ClassNotFoundException e) {
+//			LOGGER.warning("Could not find class " + driver);
+//		}
 		NativeJDBCSource jdbcSource = new NativeJDBCSource(
-				"jdbc:h2:mem:test", // URL
-				"org.h2.Driver", // DRIVER
-				properties,
-				"Sandbox JDBC Source",
+				uri,
+				driver, // DRIVER
+				sourceProperties,
+				"ActivePivot JDBC Source",
 				2, // pool size
 				5000  // append batch size
 		);
-		
+
 		// Register topics
-		jdbcSource.addTopic(new JDBCTopic("Products", "SELECT * from Products"));
-		jdbcSource.addTopic(new JDBCTopic("Trades", "SELECT * from Trades"));
-		jdbcSource.addTopic(new JDBCTopic("Risks", "SELECT * from Risks"));
-		
+//		jdbcSource.addTopic(new JDBCTopic("USERAPP", "SELECT * from USERAPP"));
+//		jdbcSource.addTopic(new JDBCTopic("PLAN", "SELECT * from PLAN"));
+//		jdbcSource.addTopic(new JDBCTopic("QUOTA", "SELECT * from QUOTA"));
+		jdbcSource.addTopic(new JDBCTopic("MNP", "SELECT * from MNP"));
+
 		return jdbcSource;
-    }
-    
-    @Bean
-    @DependsOn(value = "createDatabase")
-    public Void loadData(IJDBCSource<QfsResultSetRow> jdbcSource) throws Exception {
-		
-    	final ITransactionManager tm = datastore.getTransactionManager();
-    	
-    	// Load data into ActivePivot
-    	final long before = System.nanoTime();
-    	
-    	// Transaction for TV data
-	    tm.startTransaction();
-		
+	}
+
+	@Bean
+	@DependsOn(value = "jdbcSource")
+	public Void loadData(IJDBCSource<QfsResultSetRow> jdbcSource) throws Exception {
+
+		final ITransactionManager tm = datastore.getTransactionManager();
+
+		// Load data into ActivePivot
+		final long before = System.nanoTime();
+
+		// Transaction for TV data
+		tm.startTransaction();
+
 		JDBCMessageChannelFactory jdbcChannelFactory = new JDBCMessageChannelFactory(jdbcSource, datastore);
-		IMessageChannel<String, QfsResultSetRow> productChannel = jdbcChannelFactory.createChannel("Products");
-		IMessageChannel<String, QfsResultSetRow> tradeChannel = jdbcChannelFactory.createChannel("Trades");
-		IMessageChannel<String, QfsResultSetRow> riskChannel = jdbcChannelFactory.createChannel("Risks");
-		
-		jdbcSource.fetch(Arrays.asList(productChannel, tradeChannel, riskChannel));
-		
+		IMessageChannel<String, QfsResultSetRow> mnpChannel = jdbcChannelFactory.createChannel("MNP");
+
+		jdbcSource.fetch(Arrays.asList(mnpChannel));
+
 		tm.commitTransaction();
-		
-    	final long elapsed = System.nanoTime() - before;
-    	LOGGER.info("Data load completed in " + elapsed / 1000000L + "ms");
-    	
-    	printStoreSizes();
-    	
-    	return null;
-    }
+
+		final long elapsed = System.nanoTime() - before;
+		LOGGER.info("Data load completed in " + elapsed / 1000000L + "ms");
+
+		printStoreSizes();
+
+		return null;
+	}
 
 
 	private void printStoreSizes() {

@@ -60,14 +60,19 @@
 			<artifactId>activeui</artifactId>
 			<version>${activeui.version}</version>
 		</dependency>
-		
-		<!-- H2 database -->
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.4.197</version>
+
+		<!-- Leanxcale database -->
+<!--		<dependency>
+			<groupId>com.leanxcale</groupId>
+			<artifactId>elasticdriver</artifactId>
+			<version>0.96-20190417.111340-31-jar-with-dependencies</version>
 		</dependency>
-		
+-->
+                <dependency>
+                        <groupId>com.leanxcale</groupId>
+                        <artifactId>qe-driver</artifactId>
+                        <version>0.100-SNAPSHOT-jdbc-client</version>
+                </dependency>
 	</dependencies>
 
 	<build>

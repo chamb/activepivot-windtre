@@ -42,7 +42,7 @@ public class DatastoreDescriptionConfig implements IDatastoreDescriptionConfig {
 	@Bean
 	public IStoreDescription mnp() {
 		return new StoreDescriptionBuilder().withStoreName("MNP")
-				.withField("IdMnp", LONG).asKeyField()
+				.withField("IdMnp", INT).asKeyField()
 				.withField("MSISDN", STRING)
 				.withField("Recipient", STRING)
 				.withField("Donator", STRING)
