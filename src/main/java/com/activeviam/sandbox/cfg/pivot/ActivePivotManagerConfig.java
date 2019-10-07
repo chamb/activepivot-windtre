@@ -116,20 +116,21 @@ public class ActivePivotManagerConfig implements IActivePivotManagerDescriptionC
 		return builder
 
 			.withDimension("MNP")
-				.withHierarchy("Recipient").asDefaultHierarchy().withLevelOfSameName()
-				.withHierarchy("Donator").withLevelOfSameName()
-				.withHierarchy("RoutingNumber").withLevelOfSameName()
+                                .withHierarchy("IDMNP").asDefaultHierarchy().withLevelOfSameName()
+				.withHierarchy("RECIPIENT").withLevelOfSameName()
+				.withHierarchy("DONATOR").withLevelOfSameName()
+				.withHierarchy("ROUTING_NUMBER").withLevelOfSameName()
 				.withHierarchy("ICCID").withLevelOfSameName()
-				.withHierarchy("Status").withLevelOfSameName()
-				.withHierarchy("QuotaStatus").withLevelOfSameName()
-				.withHierarchy("CheckTimeRequestTime").withLevelOfSameName()
-				.withHierarchy("PortInTimeCheckTime").withLevelOfSameName()
-				.withHierarchy("PortOutTimePortInTime").withLevelOfSameName()
+				.withHierarchy("STATUS").withLevelOfSameName()
+				.withHierarchy("QUOTA_STATUS").withLevelOfSameName()
+				.withHierarchy("CHECK_TIME_REQUEST_TIME").withLevelOfSameName()
+				.withHierarchy("PORT_IN_TIME_CHECK_TIME").withLevelOfSameName()
+				.withHierarchy("PORT_OUT_TIME_PORT_IN_TIME").withLevelOfSameName()
 			.withDimension("Times")
-				.withHierarchy("RequestTime").withLevelOfSameName().withType(LevelType.TIME)
-				.withHierarchy("RequestCheckTime").withLevelOfSameName().withType(LevelType.TIME)
-				.withHierarchy("PortInUpdateTime").withLevelOfSameName().withType(LevelType.TIME)
-				.withHierarchy("PortOutUpdateTime").withLevelOfSameName().withType(LevelType.TIME);
+				.withHierarchy("REQUEST_TIME").withLevelOfSameName().withType(LevelType.TIME)
+				.withHierarchy("REQUEST_CHECK_TIME").withLevelOfSameName().withType(LevelType.TIME)
+				.withHierarchy("PORT_IN_UPDATE_TIME").withLevelOfSameName().withType(LevelType.TIME)
+				.withHierarchy("PORT_OUT_UPDATE_TIME").withLevelOfSameName().withType(LevelType.TIME);
 	}
 
 	/* ******************* */

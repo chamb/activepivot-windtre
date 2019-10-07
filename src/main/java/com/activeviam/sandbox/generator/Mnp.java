@@ -58,20 +58,20 @@ public class Mnp implements IClone<Mnp>, Serializable{
 	public String toString(){
 		StringBuilder sb = new StringBuilder(getClass().getSimpleName());
                 sb.append("IDMNP=").append(getIdMnp());
-                sb.append(", msisdn").append(getMsisdn());
-                sb.append(", recipient").append(getRecipient());
-                sb.append(", donator").append(getDonator());
-                sb.append(", routingNumber").append(getRoutingNumber());
-                sb.append(", iccid").append(getIccid());
-                sb.append(", status").append(getStatus());
-                sb.append(", requestTime").append(getRequestTime());
-                sb.append(", requestCheckTime").append(getRequestCheckTime());
-                sb.append(", portInUpdateTime").append(getPortInUpdateTime());
-                sb.append(", portOutUpdateTime").append(getPortOutUpdateTime());
-                sb.append(", quotaStatus").append(getQuotaStatus());
-                sb.append(", checkTimeRequestTime").append(getCheckTimeRequestTime());
-                sb.append(", portInTimeCheckTime").append(getPortInTimeCheckTime());
-                sb.append(", portOutTimePortInTime").append(getPortOutTimePortInTime());
+                sb.append(", MSISDN=").append(getMsisdn());
+                sb.append(", RECIPIENT=").append(getRecipient());
+                sb.append(", DONATOR=").append(getDonator());
+                sb.append(", ROUTING_NUMBER=").append(getRouting_Number());
+                sb.append(", ICCID=").append(getIccid());
+                sb.append(", STATUS=").append(getStatus());
+                sb.append(", REQUEST_TIME=").append(getRequest_Time());
+                sb.append(", REQUEST_CHECK_TIME=").append(getRequest_Check_Time());
+                sb.append(", PORT_IN_UPDATE_TIME=").append(getPort_In_Update_Time());
+                sb.append(", PORT_OUT_UPDATE_TIME=").append(getPort_Out_Update_Time());
+                sb.append(", QUOTA_STATUS=").append(getQuota_Status());
+                sb.append(", CHECK_TIME_REQUEST_TIME=").append(getCheck_Time_Request_Time());
+                sb.append(", PORT_IN_TIME_CHECK_TIME=").append(getPort_In_Time_Check_Time());
+                sb.append(", PORT_OUT_TIME_PORT_IN_TIME=").append(getPort_Out_Time_Port_In_Time());
 		sb.append(")");
 		return sb.toString();
 	}
@@ -118,11 +118,11 @@ public class Mnp implements IClone<Mnp>, Serializable{
                 this.donator = donator;
         }
 
-        public String getRoutingNumber() {
+        public String getRouting_Number() {
                 return this.routingNumber;
         }
 
-        public void setRoutingNumber(String RoutingNumber) {
+        public void setRouting_Number(String Routing_Number) {
                 this.routingNumber = routingNumber;
         }
 
@@ -142,67 +142,67 @@ public class Mnp implements IClone<Mnp>, Serializable{
                 this.status = status;
         }
 
-        public LocalDate getRequestTime() {
+        public LocalDate getRequest_Time() {
                 return this.requestTime;
         }
 
-        public void setRequestTime(LocalDate RequestTime) {
+        public void setRequest_Time(LocalDate RequestTime) {
                 this.requestTime = requestTime;
         }
 
-        public LocalDate getRequestCheckTime() {
+        public LocalDate getRequest_Check_Time() {
                 return this.requestCheckTime;
         }
 
-        public void setRequestCheckTime(LocalDate RequestCheckTime) {
+        public void setRequest_Check_Time(LocalDate RequestCheckTime) {
                 this.requestCheckTime = requestCheckTime;
         }
 
-        public LocalDate getPortInUpdateTime() {
+        public LocalDate getPort_In_Update_Time() {
                 return this.portInUpdateTime;
         }
 
-        public void setPortInUpdateTime(LocalDate PortInUpdateTime) {
+        public void setPort_In_Update_Time(LocalDate PortInUpdateTime) {
                 this.portInUpdateTime = portInUpdateTime;
         }
 
-        public LocalDate getPortOutUpdateTime() {
+        public LocalDate getPort_Out_Update_Time() {
                 return this.portOutUpdateTime;
         }
 
-        public void setPortOutUpdateTime(LocalDate PortOutUpdateTime) {
+        public void setPort_Out_Update_Time(LocalDate PortOutUpdateTime) {
                 this.portOutUpdateTime = portOutUpdateTime;
         }
 
-        public String getQuotaStatus() {
+        public String getQuota_Status() {
                 return this.quotaStatus;
         }
 
-        public void setQuotaStatus(String QuotaStatus) {
+        public void setQuota_Status(String QuotaStatus) {
                 this.quotaStatus = quotaStatus;
         }
 
-        public String getCheckTimeRequestTime() {
+        public String getCheck_Time_Request_Time() {
                 return this.checkTimeRequestTime;
         }
 
-        public void setCheckTimeRequestTime(String CheckTimeRequestTime) {
+        public void setCheck_Time_Request_Time(String CheckTimeRequestTime) {
                 this.checkTimeRequestTime = checkTimeRequestTime;
         }
 
-        public String getPortInTimeCheckTime() {
+        public String getPort_In_Time_Check_Time() {
                 return this.portInTimeCheckTime;
         }
 
-        public void setPortInTimeCheckTime(String PortInTimeCheckTime) {
+        public void setPort_In_Time_Check_Time(String PortInTimeCheckTime) {
                 this.portInTimeCheckTime = portInTimeCheckTime;
         }
 
-        public String getPortOutTimePortInTime() {
+        public String getPort_Out_Time_Port_In_Time() {
                 return this.portOutTimePortInTime;
         }
 
-        public void setPortOutTimePortInTime(String PortOutTimePortInTime) {
+        public void setPort_Out_Time_Port_In_Time(String PortOutTimePortInTime) {
                 this.portOutTimePortInTime = portOutTimePortInTime;
         }
 
