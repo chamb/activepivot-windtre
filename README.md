@@ -1,8 +1,56 @@
-# activepivot-jdbc
-ActivePivot sample project to demonstrate loading data from a relational database using JDBC.
+# activepivot-jdbc for the MNP database
 
-To start the application, launch `com.activeviam.sandbox.ActivePivotJDBCApplication` or alternatively, build the project with maven (`mvn clean install`) which will produce a Spring Boot executable jar containing all its dependencies, and then run the jar with `java -jar activepivot-jdbc-1.0.0-SNAPSHOT.jar`.
+## Getting everything
 
-The project is autocontained and creates a transient h2 database when the application starts, loaded with sample data (a portfolio management data model with trades, products and risks). The initialization of database is done in `com.activeviam.sandbox.cfg.DataLoadingConfig#createDatabase()`. When using an existing database, this preparation step can be removed.
+Clone this repository to cdba3.
 
-The data is loaded from the database into ActivePivot using the ActiveViam JDBC Source. The JDBC Source a Spring bean configured by `com.activeviam.sandbox.cfg.DataLoadingConfig#jdbcSource()` and the ActivePivot loading is implemented in `com.activeviam.sandbox.cfg.DataLoadingConfig#loadData()`.
+## Compiling
+
+```
+./mvnBuild.sh
+```
+
+If you edit the properties, you will need to recompile your project.
+
+You will not be able to build out of cdba3, as some dependencies are
+contained in cdba3.
+
+## Executing
+
+```
+./run.sh
+```
+ActivePivot takes around 6min to load the 12 million rows of the MNP table.
+
+This line
+```
+2019-10-07 15:24:18.983  INFO 63360 --- [vent-dispatcher] c.a.h.m.ILoggingHealthEventHandler       : [datastore, transaction] INFO 2019-10-07T13:24:18.978Z uptime=10416ms com.qfs.store.transaction.impl.TransactionManager.startTransactionNoRevert:528
+```
+shows the data is being loaded. When it finishes, a table summarizing the
+amount of data loaded is printed, along with these lines:
+```
+2019-10-07 15:30:35.164  INFO 63360 --- [vent-dispatcher] c.a.h.m.ILoggingHealthEventHandler       : [datastore, transaction] INFO 2019-10-07T13:30:35.164Z uptime=386602ms com.qfs.store.transaction.impl.TransactionManager.commitTransaction:1012 thread=main thread_id=1 event_type=DatastoreTransactionCommitted Transaction Committed  transaction_id=1 transaction_duration=376187ms commit_duration=46ms
+2019-10-07 15:30:35.164  INFO 63360 --- [           main] DataLoadingConfig                        : Data load completed in 376188ms
+```
+Once the data is loaded, you can connect to ActiveUI and run queries.
+
+## Running queries
+
+In your web browser, connect to 92.43.249.205:19210/
+Username is "admin", password is "admin".
+
+In the widget tab, drag and drop a "pivot table" to the main window.
+
+In the content editor tab, drag and drop fields to rows and columns to
+perform queries. You can also add filters.
+
+## Editing the project
+
+Relevant files:
+* `src/main/resources/application.properties` defines the database connection
+  properties, and the port on which active-ui is available.
+* `src/main/java/com/activeviam/sandbox/` contains all the code. In particular,
+  `generator/Mnp.java`,
+  `cfg/datastore/DatastoreDescriptionConfig`, and
+  `cfg/pivot/ActivePivotManagerConfig` define the data model (fields and data
+  types of the MNP store).
