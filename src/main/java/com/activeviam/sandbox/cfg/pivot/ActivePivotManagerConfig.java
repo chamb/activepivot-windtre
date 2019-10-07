@@ -27,15 +27,15 @@ import com.quartetfs.biz.pivot.definitions.IActivePivotManagerDescription;
 import com.quartetfs.biz.pivot.definitions.ISelectionDescription;
 
 /**
- * 
+ *
  * Configuration of the cube, hierarchies and aggregations.
- * 
+ *
  * @author ActiveViam
  *
  */
 @Configuration
 public class ActivePivotManagerConfig implements IActivePivotManagerDescriptionConfig {
-	
+
 	/* ********** */
 	/* Formatters */
 	/* ********** */
@@ -49,7 +49,7 @@ public class ActivePivotManagerConfig implements IActivePivotManagerDescriptionC
 	@Override
 	@Bean
 	public IActivePivotManagerDescription managerDescription() {
-		
+
 		return StartBuilding.managerDescription("NanoPivot")
 				.withCatalog("ActivePivot Catalog")
 				.containingAllCubes()
@@ -58,10 +58,10 @@ public class ActivePivotManagerConfig implements IActivePivotManagerDescriptionC
 				.withCube(createCubeDescription())
 				.build();
 	}
-	
+
 	/**
 	 * Creates the {@link ISelectionDescription} for NanoPivot Schema.
-	 * 
+	 *
 	 * @param datastoreDescription : The datastore description
 	 * @return The created selection description
 	 */
@@ -72,7 +72,7 @@ public class ActivePivotManagerConfig implements IActivePivotManagerDescriptionC
 				.withAllReachableFields()
 				.build();
 	}
-	
+
 	/**
 	 * Creates the cube description.
 	 * @return The created cube description
@@ -89,12 +89,12 @@ public class ActivePivotManagerConfig implements IActivePivotManagerDescriptionC
 	 */
 	public static ICanBuildCubeDescription<IActivePivotInstanceDescription> configureCubeBuilder(
 			final INamedCubeDescriptionBuilder builder) {
-		
+
 		return builder
 				.withDimensions(ActivePivotManagerConfig::dimensions)
-				
+
 				//Suggestion : PostProcessor definitions can be added here
-				
+
 				.withDescriptionPostProcessor(
 						StartBuilding.copperCalculations()
 							.withDefinition(ActivePivotManagerConfig::coPPerCalculations)
@@ -112,9 +112,9 @@ public class ActivePivotManagerConfig implements IActivePivotManagerDescriptionC
 	 * @return The builder for chained calls
 	 */
 	public static ICanBuildCubeDescription<IActivePivotInstanceDescription> dimensions (ICanStartBuildingDimensions builder) {
-		
+
 		return builder
-				
+
 			.withDimension("MNP")
 				.withHierarchy("Recipient").asDefaultHierarchy().withLevelOfSameName()
 				.withHierarchy("Donator").withLevelOfSameName()
@@ -135,7 +135,7 @@ public class ActivePivotManagerConfig implements IActivePivotManagerDescriptionC
 	/* ******************* */
 	/* Measures definition */
 	/* ******************* */
-	
+
 	/**
 	 * The CoPPer calculations to add to the cube
 	 * @param context The context with which to build the calculations.
@@ -144,16 +144,16 @@ public class ActivePivotManagerConfig implements IActivePivotManagerDescriptionC
 		ActivePivotManagerConfig.someAggregatedMeasures(context).publish();
 	}
 
-	
+
 	/**
 	 * Define some calculations using the COPPER API.
 	 *
 	 * @param context The CoPPer build context.
 	 *
 	 * @return The Dataset of the aggregated measures.
-	 */		
+	 */
 	protected static Dataset someAggregatedMeasures(final BuildingContext context) {
-		
+
 		return context.createDatasetFromFacts()
 			.agg(
 				count().as("MNP Count")
