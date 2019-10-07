@@ -57,7 +57,7 @@ public class Mnp implements IClone<Mnp>, Serializable{
 	@Override
 	public String toString(){
 		StringBuilder sb = new StringBuilder(getClass().getSimpleName());
-                sb.append("idMnp=").append(getIdMnp());
+                sb.append("IDMNP=").append(getIdMnp());
                 sb.append(", msisdn").append(getMsisdn());
                 sb.append(", recipient").append(getRecipient());
                 sb.append(", donator").append(getDonator());

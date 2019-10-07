@@ -42,7 +42,7 @@ public class DatastoreDescriptionConfig implements IDatastoreDescriptionConfig {
 	@Bean
 	public IStoreDescription mnp() {
 		return new StoreDescriptionBuilder().withStoreName("MNP")
-				.withField("IdMnp", INT).asKeyField()
+				.withField("IDMNP", INT).asKeyField()
 				.withField("MSISDN", STRING)
 				.withField("Recipient", STRING)
 				.withField("Donator", STRING)
@@ -57,7 +57,7 @@ public class DatastoreDescriptionConfig implements IDatastoreDescriptionConfig {
 				.withField("CheckTimeRequestTime", STRING)
 				.withField("PortInTimeCheckTime", STRING)
 				.withField("PortOutTimePortInTime", STRING)
-				.withModuloPartitioning("IdMnp", 8)
+				.withModuloPartitioning("IDMNP", 8)
 				.build();
 	}
 
