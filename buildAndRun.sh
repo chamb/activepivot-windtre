@@ -1,0 +1,2 @@
+./mvnBuild.sh
+./run.sh
