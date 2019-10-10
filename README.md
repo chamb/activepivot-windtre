@@ -36,7 +36,7 @@ Once the data is loaded, you can connect to ActiveUI and run queries.
 
 ## Running queries
 
-In your web browser, connect to 92.43.249.205:19210/
+In your web browser, connect to 92.43.249.205:19310/
 Username is "admin", password is "admin".
 
 In the widget tab, drag and drop a "pivot table" to the main window.
@@ -51,6 +51,7 @@ Relevant files:
   properties, and the port on which active-ui is available.
 * `src/main/java/com/activeviam/sandbox/` contains all the code. In particular,
   `generator/Mnp.java`,
-  `cfg/datastore/DatastoreDescriptionConfig`, and
-  `cfg/pivot/ActivePivotManagerConfig` define the data model (fields and data
-  types of the MNP store).
+  `cfg/datastore/DatastoreDescriptionConfig.java`, and
+  `cfg/pivot/ActivePivotManagerConfig.java`
+  define the data model (fields and data types of the MNP store).
+
